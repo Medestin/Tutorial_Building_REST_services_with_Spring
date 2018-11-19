@@ -6,10 +6,11 @@ import io.spring.RestServiceTutorial.payroll.exception.EmployeeNotFoundException
 import io.spring.RestServiceTutorial.payroll.repository.EmployeeRepository;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,13 +44,18 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees")
-    public ResponseEntity addEmployee(@RequestBody Employee employee) {
-        repository.save(employee);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity addEmployee(@RequestBody Employee employee) throws URISyntaxException {
+        Resource<Employee> resource = assembler.toResource(repository.save(employee));
+
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @PutMapping("/employees/{id}")
-    public Resource<Employee> replaceEmployee(@RequestBody Employee employee, @PathVariable Long id) {
+    public ResponseEntity replaceEmployee(@RequestBody Employee employee, @PathVariable Long id)
+            throws URISyntaxException {
+
         Employee newEmployee = repository.findById(id)
                 .map(e -> {
                     e.setName(employee.getName());
@@ -60,7 +66,11 @@ public class EmployeeController {
                             return repository.save(employee);
                         }
                 );
-        return assembler.toResource(newEmployee);
+
+        Resource<Employee> resource = assembler.toResource(newEmployee);
+
+        return ResponseEntity.created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
     }
 
     @DeleteMapping("/employees/{id}")
