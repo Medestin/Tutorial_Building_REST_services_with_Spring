@@ -1,4 +1,4 @@
-package io.spring.RestServiceTutorial.payroll;
+package io.spring.RestServiceTutorial.payroll.employee;
 
 import lombok.Data;
 

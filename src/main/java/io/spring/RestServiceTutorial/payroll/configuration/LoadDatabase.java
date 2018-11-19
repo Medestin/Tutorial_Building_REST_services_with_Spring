@@ -1,5 +1,7 @@
-package io.spring.RestServiceTutorial.payroll;
+package io.spring.RestServiceTutorial.payroll.configuration;
 
+import io.spring.RestServiceTutorial.payroll.employee.Employee;
+import io.spring.RestServiceTutorial.payroll.repository.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
