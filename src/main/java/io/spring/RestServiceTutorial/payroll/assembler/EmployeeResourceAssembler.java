@@ -12,9 +12,9 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @Component
 public class EmployeeResourceAssembler implements ResourceAssembler<Employee, Resource<Employee>> {
     @Override
-    public Resource<Employee> toResource(Employee entity) {
-        return new Resource<>(entity,
-                linkTo(methodOn(EmployeeController.class).getEmployeeById(entity.getId())).withSelfRel(),
+    public Resource<Employee> toResource(Employee employee) {
+        return new Resource<>(employee,
+                linkTo(methodOn(EmployeeController.class).getEmployeeById(employee.getId())).withSelfRel(),
                 linkTo(methodOn(EmployeeController.class).getEmployees()).withRel("employees"));
     }
 }
